@@ -18,5 +18,5 @@ interface NodeDao {
     suspend fun setNodeList(nodeList: List<NodeEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun setNode(node: List<NodeEntity>)
+    suspend fun setNode(node: NodeEntity)
 }

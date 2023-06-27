@@ -10,26 +10,44 @@ import javax.inject.Inject
 
 class NodeRepositoryImpl @Inject constructor(
     private val nodeDao: NodeDao
-): NodeRepository {
+) : NodeRepository {
     override fun getNodeByLable(label: String): Flow<State<Node?>> = flow {
         emit(State.Loading())
         try {
             val node = nodeDao.getNodeByLabel(label).asDomain()
-            emit(State.Success(data=node))
+            emit(State.Success(data = node))
         } catch (e: Exception) {
-
+            emit(State.Error())
         }
     }
 
-    override fun getAllNodes(): Flow<State<Node?>> {
-        TODO("Not yet implemented")
+    override fun getAllNodes(): Flow<State<List<Node>?>> = flow {
+        emit(State.Loading())
+        try {
+            val nodeList = nodeDao.getNodesList().map { it.asDomain() }
+            emit(State.Success(data = nodeList))
+        } catch (e: Exception) {
+            emit(State.Error())
+        }
     }
 
+
     override suspend fun <T> insertNode(data: Node): State<T> {
-        TODO("Not yet implemented")
+        return try {
+            nodeDao.setNode(data.asDatabaseEntity())
+            State.Success()
+        } catch (e: Exception) {
+            State.Error()
+        }
+
     }
 
     override suspend fun <T> insertNodeList(data: List<Node>): State<T> {
-        TODO("Not yet implemented")
+        return try {
+            nodeDao.setNodeList(data.map { it.asDatabaseEntity() })
+            State.Success()
+        } catch (e: Exception) {
+            State.Error()
+        }
     }
 }
