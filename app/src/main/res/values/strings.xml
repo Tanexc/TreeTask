@@ -25,4 +25,9 @@
     <string name="purple">Сиреневый</string>
     <string name="style">Стиль</string>
     <string name="dark_theme">Тёмная тема</string>
+    <string name="ok">Хорошо</string>
+    <string name="child_tips">~ Для удаления узла смахните карточку с ним вправо.\n ~ Для перехода к узлу нажмите на соответствующую ему карточку</string>
+    <string name="node_tips">~ Для удаления узла смахните вправо карточку с его названием.\n ~ Для перехода к родительскому узлу нажмите на карточку с названием родителя.</string>
+    <string name="settings_tips">Настройте тему на ваш вкус.</string>
+    <string name="tips">Советы</string>
 </resources>
