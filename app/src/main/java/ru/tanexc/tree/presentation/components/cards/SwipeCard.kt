@@ -51,15 +51,15 @@ fun SwipeCard(
     Box(
         modifier = Modifier
             .wrapContentHeight()
-
     ) {
 
-        AnimatedVisibility(visible = swiped, exit = ExitTransition.None, enter = EnterTransition.None) {
+        AnimatedVisibility(
+            visible = swiped,
+            exit = ExitTransition.None,
+            enter = EnterTransition.None
+        ) {
             swipeContent()
         }
-
-
-
 
         Box(modifier = Modifier
             .offset(offsetX, 0.dp)
