@@ -1,6 +1,6 @@
 package ru.tanexc.tree.core.utils
 
-import android.util.Log
+
 import java.security.MessageDigest
 
 object HashTool {
