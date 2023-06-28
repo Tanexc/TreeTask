@@ -3,9 +3,9 @@ package ru.tanexc.tree.presentation.components.dialogs
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.EditNote
@@ -27,12 +27,12 @@ import ru.tanexc.tree.domain.model.Node
 
 @Composable
 fun NodeCreatingDialog(
-    node: Node,
+    parent: Node,
     onConfirm: (Node) -> Unit,
     onDismiss: () -> Unit
 ) {
 
-    val _node: MutableState<Node> = remember { mutableStateOf(node) }
+    val _node: MutableState<Node> = remember { mutableStateOf(parent) }
 
     AlertDialog(
         onDismissRequest = { onDismiss() },
@@ -61,14 +61,16 @@ fun NodeCreatingDialog(
         text = {
             Box {
                 OutlinedTextField(
+                    modifier = Modifier
+                        .height(160.dp),
                     value = _node.value.description,
                     onValueChange = {
                         _node.value = _node.value.copy(description = it)
-
                     },
                     label = {
                         Text(stringResource(R.string.description))
                     }
+
                 )
             }
         }
