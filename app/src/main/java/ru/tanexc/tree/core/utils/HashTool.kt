@@ -1,5 +1,6 @@
 package ru.tanexc.tree.core.utils
 
+import android.util.Log
 import java.security.MessageDigest
 
 object HashTool {
@@ -11,11 +12,11 @@ object HashTool {
     }
 
     fun getHashPart(values: List<String>, length: Int): String {
-        val hash = getHashByteArray(values.toString())
-        return if (length > hash.size) {
-            hash.toString()
+        val hash = getHashByteArray(values.toString()).fold("") { str, it -> str + "%02x".format(it) }
+        return if (length > hash.length) {
+            hash
         } else {
-            hash.copyOfRange(hash.size - length, hash.size).toString()
+            hash.substring(hash.length - length, hash.length)
         }
     }
 }

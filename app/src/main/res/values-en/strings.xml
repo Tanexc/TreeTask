@@ -12,4 +12,7 @@
     <string name="no_parent">Parent does not exist</string>
     <string name="root_description">This is the root node</string>
     <string name="navigate_to_parent">Navigate to parent</string>
+    <string name="creating">Creating</string>
+    <string name="done">Done</string>
+    <string name="dismiss">Dismiss</string>
 </resources>

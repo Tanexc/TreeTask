@@ -12,4 +12,7 @@
     <string name="no_parent">Родитель отсутствует</string>
     <string name="root_description">Это корневой узел</string>
     <string name="navigate_to_parent">Перейти к родителю</string>
+    <string name="creating">Создание</string>
+    <string name="done">Готово</string>
+    <string name="dismiss">Отмена</string>
 </resources>
