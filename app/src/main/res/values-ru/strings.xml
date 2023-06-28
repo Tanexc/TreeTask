@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Дерево</string>
+    <string name="node">Узел</string>
+    <string name="child">Дочерние узлы</string>
+    <string name="settings">Настройки</string>
+    <string name="info">Информация</string>
+    <string name="title">Название</string>
+    <string name="description">Описание</string>
+    <string name="amount_of_child_nodes">Количество дочерних узлов:</string>
+    <string name="parent">Родитель</string>
+    <string name="no_parent">Родитель отсутствует</string>
+    <string name="root_description">Это корневой узел</string>
+    <string name="navigate_to_parent">Перейти к родителю</string>
+</resources>
