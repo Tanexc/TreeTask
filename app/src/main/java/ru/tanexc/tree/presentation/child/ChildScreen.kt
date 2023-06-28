@@ -17,6 +17,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -53,7 +54,7 @@ fun ChildScreen(
         LazyColumn(
             modifier = Modifier
                 .padding(
-                    horizontal = 4.dp,
+                    horizontal = 8.dp,
                     vertical = 0.dp
                 )
         ) {
@@ -85,7 +86,7 @@ fun ChildScreen(
                                         .clickable {
                                             deleteNodeDialogState.value = it
                                         },
-                                    color = colorScheme.tertiary
+                                    color = colorScheme.error
                                 )
                             }
 
@@ -114,6 +115,8 @@ fun ChildScreen(
             onClick = {
                 nodeCreatingDialogVisible.value = true
             },
+            containerColor = colorScheme.secondaryContainer,
+            contentColor = contentColorFor(backgroundColor = colorScheme.secondaryContainer),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)

@@ -20,4 +20,9 @@
     <string name="exit">Exit</string>
     <string name="yes">Yes</string>
     <string name="delete_question">Do you want to delete a node?</string>
+    <string name="app_default">Default</string>
+    <string name="blue">Blue</string>
+    <string name="purple">Purple</string>
+    <string name="style">Style</string>
+    <string name="dark_theme">Dark theme</string>
 </resources>

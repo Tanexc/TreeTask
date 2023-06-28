@@ -20,4 +20,9 @@
     <string name="exit">Выход</string>
     <string name="yes">Да</string>
     <string name="delete_question">Вы действительно хотите удалить узел?</string>
+    <string name="app_default">Основной</string>
+    <string name="blue">Синий</string>
+    <string name="purple">Сиреневый</string>
+    <string name="style">Стиль</string>
+    <string name="dark_theme">Тёмная тема</string>
 </resources>

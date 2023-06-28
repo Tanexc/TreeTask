@@ -1,17 +1,22 @@
 package ru.tanexc.tree.presentation.main.components
 
-import android.widget.Toast
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -26,22 +31,21 @@ import ru.tanexc.tree.R
 import ru.tanexc.tree.core.utils.Screen
 import ru.tanexc.tree.core.utils.Theme
 import ru.tanexc.tree.domain.model.Node
+import ru.tanexc.tree.domain.model.Settings
 import ru.tanexc.tree.presentation.child.ChildScreen
 import ru.tanexc.tree.presentation.main.view_model.MainViewModel
 import ru.tanexc.tree.presentation.theme.TreeTheme
 import ru.tanexc.tree.presentation.theme.getTheme
 import ru.tanexc.tree.presentation.node.NodeScreen
+import ru.tanexc.tree.presentation.settings.SettingsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TreeApp() {
 
     val viewModel: MainViewModel = hiltViewModel()
-
-    val colorScheme = getTheme(Theme.Default(), isSystemInDarkTheme())
-
     TreeTheme(
-        colorScheme = colorScheme
+        colorScheme = viewModel.colorScheme?: (viewModel.settings?: Settings()).getColorScheme()
     ) {
         val screens = listOf(
             Screen.Child,
@@ -104,24 +108,35 @@ fun TreeApp() {
                     is Screen.Node -> {
                         NodeScreen(
                             modifier = Modifier.padding(innerPadding),
-                            colorScheme = colorScheme,
-                            node = viewModel.shownNode ?: Node(),
-                            parent = viewModel.shownNodeParent
+                            colorScheme = viewModel.colorScheme?: (viewModel.settings?: Settings()).getColorScheme(),
+                            node = viewModel.currentNode ?: Node(),
+                            parent = viewModel.currentNodeParent
                                 ?: Node(label = stringResource(R.string.no_parent)),
-                            child = viewModel.shownNodeChild,
+                            child = viewModel.currentNodeChild,
                             onNavigateToParent = {
                                 viewModel.updateShownNode(it)
                             }
                         )
                     }
 
-                    is Screen.Settings -> {}
+                    is Screen.Settings -> {
+                        SettingsScreen(
+                            modifier = Modifier.padding(innerPadding),
+                            onSettingsChange = {
+                                Log.i("cum", "${it}")
+                                viewModel.setColorScheme(it.getColorScheme())
+                                viewModel.changeSettings(it)
+                            },
+                            colorScheme = viewModel.colorScheme?: (viewModel.settings?: Settings()).getColorScheme(),
+                            settings = viewModel.settings?: Settings()
+                        )
+                    }
                     is Screen.Child -> {
                         ChildScreen(
                             modifier = Modifier.padding(innerPadding),
-                            child = viewModel.shownNodeChild,
-                            colorScheme = colorScheme,
-                            shownNode = viewModel.shownNode?: Node(),
+                            child = viewModel.currentNodeChild,
+                            colorScheme = viewModel.colorScheme?: (viewModel.settings?: Settings()).getColorScheme(),
+                            shownNode = viewModel.currentNode?: Node(),
                             onNavigateToChild = {
                                 viewModel.updateShownNode(it)
                                 viewModel.updateCurrentScreen(Screen.Node)
