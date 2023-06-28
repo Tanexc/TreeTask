@@ -1,6 +1,5 @@
 package ru.tanexc.tree.data.repository
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.tanexc.tree.core.utils.State
@@ -32,14 +31,11 @@ class NodeRepositoryImpl @Inject constructor(
 
 
     override fun insertNode(data: Node): Flow<State<Node>> = flow {
-        Log.i("Test", "salam $data")
         try {
             val id = nodeDao.setNode(data.asDatabaseEntity())
             emit(State.Success(data.copy(id=id)))
-            Log.i("Test", "salam $data")
         } catch (e: Exception) {
             emit(State.Error(message = e.message))
-            Log.i("Test", "err ${e.message}")
         }
 
     }
@@ -50,7 +46,24 @@ class NodeRepositoryImpl @Inject constructor(
             emit(State.Success(data.map { it.copy(id=idList[data.indexOf(it)]) }))
         } catch (e: Exception) {
             emit(State.Error(message = e.message))
-            Log.i("Test", "err ${e.message}")
+        }
+    }
+
+    override fun deleteNode(data: Node): Flow<State<Node?>> = flow {
+        try {
+            nodeDao.deleteNode(data.asDatabaseEntity())
+            emit(State.Success(data))
+        } catch (e: Exception) {
+            emit(State.Error(message = e.message))
+        }
+    }
+
+    override fun deleteNodeList(data: List<Node>): Flow<State<List<Node>?>> = flow {
+        try {
+            nodeDao.deleteNodeList(data.map { it.asDatabaseEntity() })
+            emit(State.Success(data))
+        } catch (e: Exception) {
+            emit(State.Error(message = e.message))
         }
     }
 }

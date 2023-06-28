@@ -1,10 +1,12 @@
 package ru.tanexc.tree.data.local.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import ru.tanexc.tree.data.local.entity.NodeEntity
+import ru.tanexc.tree.domain.model.Node
 
 @Dao
 interface NodeDao {
@@ -19,4 +21,10 @@ interface NodeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun setNode(node: NodeEntity): Long
+
+    @Delete
+    suspend fun deleteNode(node: NodeEntity)
+
+    @Delete
+    suspend fun deleteNodeList(nodeList: List<NodeEntity>)
 }
