@@ -7,5 +7,5 @@ import javax.inject.Inject
 class SetNodesListUseCase  @Inject constructor(
     private val nodeRepository: NodeRepository
 ) {
-    suspend operator fun invoke(nodeList: List<Node>) = nodeRepository.insertNodeList(nodeList)
+    operator fun invoke(nodeList: List<Node>) = nodeRepository.insertNodeList(nodeList)
 }
