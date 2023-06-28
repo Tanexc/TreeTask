@@ -15,4 +15,9 @@
     <string name="creating">Создание</string>
     <string name="done">Готово</string>
     <string name="dismiss">Отмена</string>
+    <string name="delete">Удалить</string>
+    <string name="exit_question">Вы действительно хотите выйти?</string>
+    <string name="exit">Выход</string>
+    <string name="yes">Да</string>
+    <string name="delete_question">Вы действительно хотите удалить узел?</string>
 </resources>

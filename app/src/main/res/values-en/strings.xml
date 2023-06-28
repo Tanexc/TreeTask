@@ -15,4 +15,9 @@
     <string name="creating">Creating</string>
     <string name="done">Done</string>
     <string name="dismiss">Dismiss</string>
+    <string name="delete">Delete</string>
+    <string name="exit_question">Do you want to get out?</string>
+    <string name="exit">Exit</string>
+    <string name="yes">Yes</string>
+    <string name="delete_question">Do you want to delete a node?</string>
 </resources>
