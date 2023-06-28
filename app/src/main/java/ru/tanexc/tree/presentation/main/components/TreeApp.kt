@@ -1,11 +1,17 @@
 package ru.tanexc.tree.presentation.main.components
 
-import android.util.Log
-import androidx.compose.foundation.isSystemInDarkTheme
+import android.app.Activity
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
@@ -16,11 +22,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import dev.olshevski.navigation.reimagined.NavBackHandler
 import dev.olshevski.navigation.reimagined.NavHost
 import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
@@ -29,13 +37,13 @@ import dev.olshevski.navigation.reimagined.popAll
 import dev.olshevski.navigation.reimagined.rememberNavController
 import ru.tanexc.tree.R
 import ru.tanexc.tree.core.utils.Screen
-import ru.tanexc.tree.core.utils.Theme
 import ru.tanexc.tree.domain.model.Node
 import ru.tanexc.tree.domain.model.Settings
 import ru.tanexc.tree.presentation.child.ChildScreen
+import ru.tanexc.tree.presentation.components.dialogs.ExitDialog
+import ru.tanexc.tree.presentation.components.dialogs.TipsDialog
 import ru.tanexc.tree.presentation.main.view_model.MainViewModel
 import ru.tanexc.tree.presentation.theme.TreeTheme
-import ru.tanexc.tree.presentation.theme.getTheme
 import ru.tanexc.tree.presentation.node.NodeScreen
 import ru.tanexc.tree.presentation.settings.SettingsScreen
 
@@ -43,9 +51,16 @@ import ru.tanexc.tree.presentation.settings.SettingsScreen
 @Composable
 fun TreeApp() {
 
+    val activity: Activity = LocalContext.current as Activity
+
     val viewModel: MainViewModel = hiltViewModel()
+    viewModel.initializeNode(viewModel.settings?.lastNodeId ?: 1L)
+
+    val tipsDialogVisibilityState: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val exitDialogVisibilityState: MutableState<Boolean> = remember { mutableStateOf(false) }
+
     TreeTheme(
-        colorScheme = viewModel.colorScheme?: (viewModel.settings?: Settings()).getColorScheme()
+        colorScheme = viewModel.colorScheme ?: (viewModel.settings ?: Settings()).getColorScheme()
     ) {
         val screens = listOf(
             Screen.Child,
@@ -56,6 +71,7 @@ fun TreeApp() {
         val startDestination: Screen = Screen.Node
         val navController = rememberNavController(startDestination = startDestination)
 
+
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
@@ -64,6 +80,21 @@ fun TreeApp() {
                             stringResource(viewModel.currentScreen.label),
                             textAlign = TextAlign.Center,
                             fontFamily = FontFamily(Font(R.font.montserrat))
+                        )
+                    },
+                    navigationIcon = {
+                        Icon(
+                            Icons.Outlined.Info,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .clickable(
+                                    interactionSource = MutableInteractionSource(),
+                                    indication = null
+                                ) {
+                                    tipsDialogVisibilityState.value =
+                                        !tipsDialogVisibilityState.value
+                                }
                         )
                     }
                 )
@@ -108,13 +139,14 @@ fun TreeApp() {
                     is Screen.Node -> {
                         NodeScreen(
                             modifier = Modifier.padding(innerPadding),
-                            colorScheme = viewModel.colorScheme?: (viewModel.settings?: Settings()).getColorScheme(),
+                            colorScheme = viewModel.colorScheme ?: (viewModel.settings
+                                ?: Settings()).getColorScheme(),
                             node = viewModel.currentNode ?: Node(),
-                            parent = viewModel.currentNodeParent
-                                ?: Node(label = stringResource(R.string.no_parent)),
-                            child = viewModel.currentNodeChild,
+                            parent = viewModel.currentNodeParent ?: Node(),
                             onNavigateToParent = {
-                                viewModel.updateShownNode(it)
+                                viewModel.updateCurrentNode(it)
+                                navController.popAll()
+                                navController.navigate(Screen.Node)
                             }
                         )
                     }
@@ -123,38 +155,75 @@ fun TreeApp() {
                         SettingsScreen(
                             modifier = Modifier.padding(innerPadding),
                             onSettingsChange = {
-                                Log.i("cum", "${it}")
                                 viewModel.setColorScheme(it.getColorScheme())
                                 viewModel.changeSettings(it)
                             },
-                            colorScheme = viewModel.colorScheme?: (viewModel.settings?: Settings()).getColorScheme(),
-                            settings = viewModel.settings?: Settings()
+                            colorScheme = viewModel.colorScheme ?: (viewModel.settings
+                                ?: Settings()).getColorScheme(),
+                            settings = viewModel.settings ?: Settings()
                         )
                     }
+
                     is Screen.Child -> {
                         ChildScreen(
                             modifier = Modifier.padding(innerPadding),
                             child = viewModel.currentNodeChild,
-                            colorScheme = viewModel.colorScheme?: (viewModel.settings?: Settings()).getColorScheme(),
-                            shownNode = viewModel.currentNode?: Node(),
+                            colorScheme = viewModel.colorScheme ?: (viewModel.settings
+                                ?: Settings()).getColorScheme(),
+                            parentNode = viewModel.currentNode ?: Node(),
                             onNavigateToChild = {
-                                viewModel.updateShownNode(it)
+                                viewModel.updateCurrentNode(it)
                                 viewModel.updateCurrentScreen(Screen.Node)
                                 navController.popAll()
                                 navController.navigate(Screen.Node)
-                                viewModel.updateCurrentScreen(Screen.Node)
                             },
-                            onChildCreated = {
-                                viewModel.createNode(it.description)
+                            onChildCreated = { parent, child ->
+                                viewModel.updateCurrentNode(parent)
+                                viewModel.updateChild(child)
+                                navController.popAll()
+                                navController.navigate(Screen.Child)
                             },
                             onDeleteChild = {
-                                viewModel.removeChild(it.id)
-                                viewModel.deleteChildNodeBranch(it)
+                                viewModel.updateCurrentNode(it)
+                                navController.popAll()
+                                navController.navigate(Screen.Child)
                             }
                         )
                     }
                 }
             }
         }
+
+        BackHandler(enabled = true) {
+            exitDialogVisibilityState.value = !exitDialogVisibilityState.value
+        }
+
+        AnimatedVisibility(
+            visible = tipsDialogVisibilityState.value,
+            enter = EnterTransition.None,
+            exit = ExitTransition.None
+        ) {
+            TipsDialog(
+                onConfirm = {
+                    tipsDialogVisibilityState.value = !tipsDialogVisibilityState.value
+                }) {
+                Text(
+                    " " + stringResource(viewModel.currentScreen.tips),
+                    fontFamily = FontFamily(Font(R.font.montserrat)),
+                    fontSize = 16.sp
+                )
+            }
+        }
+
+        AnimatedVisibility(
+            visible = exitDialogVisibilityState.value,
+            enter = EnterTransition.None,
+            exit = ExitTransition.None
+        ) {
+            ExitDialog(onDismiss = { exitDialogVisibilityState.value = !exitDialogVisibilityState.value}) {
+                activity.finish()
+            }
+        }
+
     }
 }
