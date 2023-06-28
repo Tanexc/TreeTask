@@ -9,7 +9,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.tanexc.tree.data.local.database.MainDatabase
 import ru.tanexc.tree.data.repository.NodeRepositoryImpl
+import ru.tanexc.tree.data.repository.SettingsRepositoryImpl
+import ru.tanexc.tree.domain.model.Settings
 import ru.tanexc.tree.domain.repository.NodeRepository
+import ru.tanexc.tree.domain.repository.SettingsRepository
 import javax.inject.Singleton
 
 @Module
@@ -32,5 +35,12 @@ object DatabaseModule {
     fun provideNodeRepository(
         db: MainDatabase
     ): NodeRepository = NodeRepositoryImpl(db.nodeDao)
+
+
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(
+        db: MainDatabase
+    ): SettingsRepository = SettingsRepositoryImpl(db.settingsDao)
 
 }
