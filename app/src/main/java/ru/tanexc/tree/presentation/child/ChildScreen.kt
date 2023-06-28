@@ -1,7 +1,8 @@
 package ru.tanexc.tree.presentation.child
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,8 +31,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.olshevski.navigation.reimagined.hilt.hiltViewModel
 import ru.tanexc.tree.R
 import ru.tanexc.tree.domain.model.Node
+import ru.tanexc.tree.presentation.child.view_model.ChildScreenViewModel
 import ru.tanexc.tree.presentation.components.cards.SwipeCard
 import ru.tanexc.tree.presentation.components.dialogs.DeleteNodeDialog
 import ru.tanexc.tree.presentation.components.dialogs.NodeCreatingDialog
@@ -39,13 +43,21 @@ import ru.tanexc.tree.presentation.components.dialogs.NodeCreatingDialog
 @Composable
 fun ChildScreen(
     modifier: Modifier = Modifier,
-    shownNode: Node,
+    parentNode: Node,
     child: List<Node>,
     onNavigateToChild: (Node) -> Unit,
-    onChildCreated: (Node) -> Unit,
+    onChildCreated: (Node, List<Node>) -> Unit,
     colorScheme: ColorScheme,
     onDeleteChild: (Node) -> Unit,
 ) {
+
+    val viewModel: ChildScreenViewModel = hiltViewModel()
+
+    LaunchedEffect(true) {
+        viewModel.updateNodeChild(child)
+        viewModel.updateParent(parentNode)
+    }
+
 
     val nodeCreatingDialogVisible: MutableState<Boolean> = remember { mutableStateOf(false) }
     val deleteNodeDialogState: MutableState<Node?> = remember { mutableStateOf(null) }
@@ -59,7 +71,7 @@ fun ChildScreen(
                 )
         ) {
 
-            child.forEach {
+            (viewModel.child?: child).forEach {
 
                 item {
                     SwipeCard(
@@ -68,14 +80,12 @@ fun ChildScreen(
                                 0.dp,
                                 4.dp
                             )
-                            .height(84.dp)
-                            .clickable {
-                                onNavigateToChild(it)
-                            },
+                            .height(84.dp),
                         borderRadius = 16.dp,
                         borderWidth = 1.dp,
                         borderColor = colorScheme.outline,
                         backgroundColor = colorScheme.secondaryContainer.copy(0.2f),
+                        onClick = { onNavigateToChild(it) },
                         swipeContent = {
                             Box(modifier = Modifier.size(104.dp, 84.dp)) {
                                 Text(
@@ -89,7 +99,6 @@ fun ChildScreen(
                                     color = colorScheme.error
                                 )
                             }
-
                         }
                     ) {
 
@@ -132,11 +141,16 @@ fun ChildScreen(
 
     AnimatedVisibility(
         visible = nodeCreatingDialogVisible.value,
-        enter = slideInVertically { it }) {
+        enter = EnterTransition.None,
+        exit = ExitTransition.None
+    ) {
         NodeCreatingDialog(
-            node = Node(parent = shownNode.id),
+            parent = Node(parent = (viewModel.parent?: parentNode).id),
             onConfirm = {
-                onChildCreated(it)
+                viewModel.createNode(
+                    it.description,
+                    onChildCreated
+                )
                 nodeCreatingDialogVisible.value = false
             },
             onDismiss = { nodeCreatingDialogVisible.value = false }
@@ -145,14 +159,16 @@ fun ChildScreen(
 
     AnimatedVisibility(
         visible = (deleteNodeDialogState.value is Node),
-        enter = slideInVertically { it }) {
+        enter = EnterTransition.None,
+        exit = ExitTransition.None
+    ) {
         DeleteNodeDialog(
             onConfirm = {
-                onDeleteChild(deleteNodeDialogState.value!!)
+                viewModel.deleteChildNodeBranch(deleteNodeDialogState.value!!)
+                onDeleteChild(viewModel.parent!!)
                 deleteNodeDialogState.value = null
             },
             onDismiss = { deleteNodeDialogState.value = null }
         )
     }
-
 }
