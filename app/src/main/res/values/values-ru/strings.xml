@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Siderea</string>
+    <string name="catalog">Каталог</string>
+    <string name="profile">Профиль</string>
+    <string name="settings">Настройки</string>
+    <string name="test">Тест</string>
+    <string name="stats">Статистика</string>
+    <string name="theme">Тема</string>
+    <string name="style">Стиль</string>
+    <string name="dark">Тёмная</string>
+    <string name="light">Светлая</string>
+    <string name="constellations">Созвездия</string>
+    <string name="north">Северные</string>
+    <string name="south">Южные</string>
+    <string name="of">из</string>
+    <string name="app_default">Основной</string>
+    <string name="blue">Синий</string>
+    <string name="green">Зеленый</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="error">Ошибка</string>
+    <string name="check_internet">Ошибка. Проверьте подключение к интернету.</string>
+    <string name="from">от</string>
+    <string name="to">до</string>
+    <string name="declination">Склонение</string>
+    <string name="ascent">Прямое восхождение</string>
+    <string name="equatorial">экваториальное</string>
+    <string name="north_1">северное</string>
+    <string name="south_1">южное</string>
+    <string name="location">Расположение</string>
+    <string name="alpha">Альфа</string>
+    <string name="about">О приложении</string>
+    <string name="version">Версия:</string>
+    <string name="code">Исходный код</string>
+    <string name="data_source">Инофрмация о созвездиях</string>
+    <string name="error_report">Сообщить о проблеме</string>
+    <string name="exit">Выход</string>
+    <string name="yes">Да</string>
+    <string name="dismiss">Отмена</string>
+    <string name="exit_question">Вы действительно хотите выйти?</string>
+    <string name="link">Ссылка</string>
+    <string name="open_link">Откроется внешнее приложение. Вы хотите перейти по ссылке?</string>
+</resources>
