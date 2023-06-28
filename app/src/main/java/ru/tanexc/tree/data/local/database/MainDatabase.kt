@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.tanexc.tree.data.local.dao.NodeDao
 import ru.tanexc.tree.data.local.entity.NodeEntity
-import ru.tanexc.tree.data.utils.NodeChildsConverter
+import ru.tanexc.tree.data.utils.NodeChildConverter
 
 
 @Database(
@@ -14,7 +14,7 @@ import ru.tanexc.tree.data.utils.NodeChildsConverter
     version=1
 )
 @TypeConverters(
-    NodeChildsConverter::class
+    NodeChildConverter::class
 )
 abstract class MainDatabase : RoomDatabase() {
     abstract val nodeDao: NodeDao

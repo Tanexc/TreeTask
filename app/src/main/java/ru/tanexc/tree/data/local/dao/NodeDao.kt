@@ -11,12 +11,12 @@ interface NodeDao {
     @Query("SELECT * FROM nodes")
     suspend fun getNodesList(): List<NodeEntity>
 
-    @Query("SELECT * FROM nodes WHERE label = :label")
-    suspend fun getNodeByLabel(label: String): NodeEntity
+    @Query("SELECT * FROM nodes WHERE id = :id")
+    suspend fun getNodeById(id: Long): NodeEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun setNodeList(nodeList: List<NodeEntity>)
+    suspend fun setNodeList(nodeList: List<NodeEntity>): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun setNode(node: NodeEntity)
+    suspend fun setNode(node: NodeEntity): Long
 }

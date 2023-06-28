@@ -1,5 +1,6 @@
 package ru.tanexc.tree.data.repository
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.tanexc.tree.core.utils.State
@@ -11,43 +12,42 @@ import javax.inject.Inject
 class NodeRepositoryImpl @Inject constructor(
     private val nodeDao: NodeDao
 ) : NodeRepository {
-    override fun getNodeByLable(label: String): Flow<State<Node?>> = flow {
-        emit(State.Loading())
+    override fun getNodeById(id: Long): Flow<State<Node?>> = flow {
+
         try {
-            val node = nodeDao.getNodeByLabel(label).asDomain()
+            val node = nodeDao.getNodeById(id).asDomain()
             emit(State.Success(data = node))
         } catch (e: Exception) {
-            emit(State.Error())
+            emit(State.Error(message = e.message))
         }
     }
 
     override fun getAllNodes(): Flow<State<List<Node>?>> = flow {
-        emit(State.Loading())
         try {
             val nodeList = nodeDao.getNodesList().map { it.asDomain() }
             emit(State.Success(data = nodeList))
         } catch (e: Exception) {
-            emit(State.Error())
+            emit(State.Error(message = e.message))
         }
     }
 
 
-    override suspend fun <T> insertNode(data: Node): State<T> {
-        return try {
-            nodeDao.setNode(data.asDatabaseEntity())
-            State.Success()
+    override fun insertNode(data: Node): Flow<State<Node>> = flow {
+        try {
+            val id = nodeDao.setNode(data.asDatabaseEntity())
+            emit(State.Success(data.copy(id=id)))
         } catch (e: Exception) {
-            State.Error()
+            emit(State.Error(message = e.message))
         }
 
     }
 
-    override suspend fun <T> insertNodeList(data: List<Node>): State<T> {
-        return try {
-            nodeDao.setNodeList(data.map { it.asDatabaseEntity() })
-            State.Success()
+    override fun insertNodeList(data: List<Node>): Flow<State<List<Node>>> = flow {
+        try {
+            val idList = nodeDao.setNodeList(data.map { it.asDatabaseEntity() })
+            emit(State.Success(data.map { it.copy(id=idList[data.indexOf(it)]) }))
         } catch (e: Exception) {
-            State.Error()
+            emit(State.Error(message = e.message))
         }
     }
 }

@@ -6,12 +6,12 @@ import ru.tanexc.tree.domain.model.Node
 
 interface NodeRepository {
 
-    fun getNodeByLable(label: String): Flow<State<Node?>>
+    fun getNodeById(id: Long): Flow<State<Node?>>
 
     fun getAllNodes(): Flow<State<List<Node>?>>
 
-    suspend fun <T> insertNode(data: Node): State<T>
+    fun insertNode(data: Node): Flow<State<Node>>
 
-    suspend fun <T> insertNodeList(data: List<Node>): State<T>
+    fun insertNodeList(data: List<Node>): Flow<State<List<Node>>>
 
 }

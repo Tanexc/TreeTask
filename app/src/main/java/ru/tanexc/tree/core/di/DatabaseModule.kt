@@ -29,10 +29,8 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideConstellationRepository(
+    fun provideNodeRepository(
         db: MainDatabase
     ): NodeRepository = NodeRepositoryImpl(db.nodeDao)
-
-
 
 }
