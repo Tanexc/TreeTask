@@ -7,10 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import ru.tanexc.tree.core.utils.HashTool.getHashPart
 import ru.tanexc.tree.core.utils.Screen
 import ru.tanexc.tree.core.utils.State
@@ -45,19 +43,17 @@ class MainViewModel @Inject constructor(
     val currentScreen by _currentScreen
 
     init {
-        updateShownNode(0)
+        updateShownNode(1)
     }
 
-    fun updateShownNode(id: Long) {
+    private fun updateShownNode(id: Long) {
         getNodeByIdUseCase(id).onEach {
             when (it) {
                 is State.Success -> {
                     _shownNode.value = it.data!!
                     updateParent(it.data.parent)
                     updateChild(it.data.child)
-
                 }
-
                 else -> {
                     _toastMessage.value = it.message
                 }
@@ -65,7 +61,7 @@ class MainViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun updateParent(id: Long) {
+    private fun updateParent(id: Long) {
         getNodeByIdUseCase(id).onEach {
             when (it) {
                 is State.Success -> {
@@ -79,7 +75,8 @@ class MainViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun updateChild(idList: List<Long>) {
+    private fun updateChild(idList: List<Long>) {
+        _shownNodeChild.value = emptyList()
         repeat(idList.size) { index ->
             getNodeByIdUseCase(idList[index]).onEach { state ->
                 when (state) {
@@ -96,6 +93,20 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun editShownNode() {
+        setNodeUseCase(shownNode!!.copy(child = _shownNodeChild.value.map { it.id })).onEach {
+            when (it) {
+                is State.Success -> {
+                    updateShownNode(it.data ?: shownNode!!)
+                }
+
+                else -> {
+                    _toastMessage.value = it.message
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
     fun createNode(description: String) {
         shownNode?.let { parent ->
             val node = Node(
@@ -109,17 +120,24 @@ class MainViewModel @Inject constructor(
                 values = listOf(
                     parent.id.toString(),
                     parent.child.toString(),
-                    parent.parent.toString()
+                    parent.parent.toString(),
+                    description
                 ),
-                20
+                40
             )
 
             setNodeUseCase(node.copy(label = hashLabel)).onEach {
-                when(it) {
-                    is State.Success -> _shownNodeChild.value = listOf(it.data!!) + _shownNodeChild.value
-                    else -> _toastMessage.value = it.message
+                when (it) {
+                    is State.Success -> {
+                        _shownNodeChild.value = listOf(it.data!!) + _shownNodeChild.value
+                        editShownNode()
+                    }
+
+                    else -> {
+                        _toastMessage.value = it.message
+                    }
                 }
-            }
+            }.launchIn(viewModelScope)
         }
     }
 

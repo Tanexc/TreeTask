@@ -1,4 +1,4 @@
-package ru.tanexc.tree.presentation.components
+package ru.tanexc.tree.presentation.components.cards
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

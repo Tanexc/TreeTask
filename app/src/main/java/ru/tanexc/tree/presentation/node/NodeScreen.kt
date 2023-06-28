@@ -1,4 +1,4 @@
-package ru.tanexc.tree.presentation.tree
+package ru.tanexc.tree.presentation.node
 
 
 import androidx.compose.foundation.layout.Column
@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -26,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.tanexc.tree.R
 import ru.tanexc.tree.domain.model.Node
-import ru.tanexc.tree.presentation.components.InfoCard
+import ru.tanexc.tree.presentation.components.cards.InfoCard
 
 @Composable
 fun NodeScreen(

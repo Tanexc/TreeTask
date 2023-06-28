@@ -26,10 +26,11 @@ import ru.tanexc.tree.R
 import ru.tanexc.tree.core.utils.Screen
 import ru.tanexc.tree.core.utils.Theme
 import ru.tanexc.tree.domain.model.Node
+import ru.tanexc.tree.presentation.child.ChildScreen
 import ru.tanexc.tree.presentation.main.view_model.MainViewModel
 import ru.tanexc.tree.presentation.theme.TreeTheme
 import ru.tanexc.tree.presentation.theme.getTheme
-import ru.tanexc.tree.presentation.tree.NodeScreen
+import ru.tanexc.tree.presentation.node.NodeScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,7 +74,6 @@ fun TreeApp() {
                                 navController.popAll()
                                 navController.navigate(it)
                                 viewModel.updateCurrentScreen(it)
-
                             },
                             label = {
                                 Text(
@@ -100,21 +100,39 @@ fun TreeApp() {
 
             NavBackHandler(navController)
             NavHost(navController) { screen ->
-                when(screen) {
+                when (screen) {
                     is Screen.Node -> {
                         NodeScreen(
                             modifier = Modifier.padding(innerPadding),
                             colorScheme = colorScheme,
-                            node = viewModel.shownNode?: Node(),
-                            parent = viewModel.shownNodeParent ?: Node(label = stringResource(R.string.no_parent)),
+                            node = viewModel.shownNode ?: Node(),
+                            parent = viewModel.shownNodeParent
+                                ?: Node(label = stringResource(R.string.no_parent)),
                             child = viewModel.shownNodeChild,
                             onNavigateToParent = {
                                 viewModel.updateShownNode(it)
                             }
                         )
                     }
+
                     is Screen.Settings -> {}
-                    is Screen.Child -> {}
+                    is Screen.Child -> {
+                        ChildScreen(
+                            modifier = Modifier.padding(innerPadding),
+                            child = viewModel.shownNodeChild,
+                            colorScheme = colorScheme,
+                            shownNode = viewModel.shownNode?: Node(),
+                            onNavigateToChild = {
+                                viewModel.updateShownNode(it)
+                                navController.popAll()
+                                navController.navigate(Screen.Node)
+                                viewModel.updateCurrentScreen(Screen.Node)
+                            },
+                            onChildCreated = {
+                                viewModel.createNode(it.description)
+                            }
+                        )
+                    }
                 }
             }
         }
