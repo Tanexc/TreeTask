@@ -7,5 +7,5 @@ import javax.inject.Inject
 class DeleteNodeUseCase @Inject constructor(
     private val nodeRepository: NodeRepository
 ) {
-    operator fun invoke(node: Node) = nodeRepository.deleteNode(node)
+    operator fun invoke(nodeId: Long) = nodeRepository.deleteNode(nodeId)
 }

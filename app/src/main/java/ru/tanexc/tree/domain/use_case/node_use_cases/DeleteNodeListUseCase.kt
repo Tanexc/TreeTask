@@ -7,5 +7,5 @@ import javax.inject.Inject
 class DeleteNodeListUseCase  @Inject constructor(
     private val nodeRepository: NodeRepository
 ) {
-    operator fun invoke(nodeList: List<Node>) = nodeRepository.deleteNodeList(nodeList)
+    operator fun invoke(nodeList: List<Long>) = nodeRepository.deleteNodeList(nodeList)
 }

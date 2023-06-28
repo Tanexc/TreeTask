@@ -14,8 +14,8 @@ interface NodeRepository {
 
     fun insertNodeList(data: List<Node>): Flow<State<List<Node>>>
 
-    fun deleteNode(data: Node): Flow<State<Node?>>
+    fun deleteNode(id: Long): Flow<State<Long?>>
 
-    fun deleteNodeList(data: List<Node>): Flow<State<List<Node>?>>
+    fun deleteNodeList(data: List<Long>): Flow<State<List<Long>?>>
 
 }

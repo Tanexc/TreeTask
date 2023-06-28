@@ -1,5 +1,6 @@
 package ru.tanexc.tree.data.repository
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.tanexc.tree.core.utils.State
@@ -49,21 +50,22 @@ class NodeRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun deleteNode(data: Node): Flow<State<Node?>> = flow {
+    override fun deleteNode(id: Long): Flow<State<Long?>> = flow {
         try {
-            nodeDao.deleteNode(data.asDatabaseEntity())
-            emit(State.Success(data))
+            nodeDao.deleteNode(id)
+            emit(State.Success(id))
         } catch (e: Exception) {
             emit(State.Error(message = e.message))
         }
     }
 
-    override fun deleteNodeList(data: List<Node>): Flow<State<List<Node>?>> = flow {
+    override fun deleteNodeList(data: List<Long>): Flow<State<List<Long>?>> = flow {
         try {
-            nodeDao.deleteNodeList(data.map { it.asDatabaseEntity() })
+            nodeDao.deleteNodeList(data)
             emit(State.Success(data))
         } catch (e: Exception) {
             emit(State.Error(message = e.message))
+            Log.i("cum", "ddd ${e.message}")
         }
     }
 }

@@ -22,9 +22,9 @@ interface NodeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun setNode(node: NodeEntity): Long
 
-    @Delete
-    suspend fun deleteNode(node: NodeEntity)
+    @Query("DELETE FROM nodes WHERE id = :nodeId")
+    suspend fun deleteNode(nodeId: Long)
 
-    @Delete
-    suspend fun deleteNodeList(nodeList: List<NodeEntity>)
+    @Query("DELETE FROM nodes WHERE id in (:nodeIdList)")
+    suspend fun deleteNodeList(nodeIdList: List<Long>)
 }
