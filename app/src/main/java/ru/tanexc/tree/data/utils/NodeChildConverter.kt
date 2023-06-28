@@ -1,6 +1,6 @@
 package ru.tanexc.tree.data.utils
 
-import android.util.Log
+
 import androidx.room.TypeConverter
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString

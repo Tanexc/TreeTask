@@ -1,6 +1,6 @@
 package ru.tanexc.tree.data.repository
 
-import android.util.Log
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.tanexc.tree.core.utils.State
@@ -65,7 +65,6 @@ class NodeRepositoryImpl @Inject constructor(
             emit(State.Success(data))
         } catch (e: Exception) {
             emit(State.Error(message = e.message))
-            Log.i("cum", "ddd ${e.message}")
         }
     }
 }
