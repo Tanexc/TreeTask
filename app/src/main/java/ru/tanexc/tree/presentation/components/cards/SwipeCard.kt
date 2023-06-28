@@ -69,14 +69,14 @@ fun SwipeCard(
                     val x = dragAmount
                     when {
                         x > 0 -> {
-                            if (x > 65) {
+                            if (x > 60) {
                                 offsetX = 104.dp
                                 swiped = true
                             }
                         }
 
                         x < 0 -> {
-                            if (x < -65) {
+                            if (x < -60) {
                                 swiped = false
                                 offsetX = 0.dp
                             }

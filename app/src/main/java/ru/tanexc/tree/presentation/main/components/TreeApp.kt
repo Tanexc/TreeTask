@@ -124,12 +124,17 @@ fun TreeApp() {
                             shownNode = viewModel.shownNode?: Node(),
                             onNavigateToChild = {
                                 viewModel.updateShownNode(it)
+                                viewModel.updateCurrentScreen(Screen.Node)
                                 navController.popAll()
                                 navController.navigate(Screen.Node)
                                 viewModel.updateCurrentScreen(Screen.Node)
                             },
                             onChildCreated = {
                                 viewModel.createNode(it.description)
+                            },
+                            onDeleteChild = {
+                                viewModel.removeChild(it.id)
+                                viewModel.deleteChildNodeBranch(it)
                             }
                         )
                     }

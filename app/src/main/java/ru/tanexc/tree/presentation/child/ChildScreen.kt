@@ -76,7 +76,6 @@ fun ChildScreen(
                         borderColor = colorScheme.outline,
                         backgroundColor = colorScheme.secondaryContainer.copy(0.2f),
                         swipeContent = {
-
                             Box(modifier = Modifier.size(104.dp, 84.dp)) {
                                 Text(
                                     stringResource(R.string.delete),
@@ -84,7 +83,7 @@ fun ChildScreen(
                                     modifier = Modifier
                                         .align(Center)
                                         .clickable {
-                                            onDeleteChild(it)
+                                            deleteNodeDialogState.value = it
                                         },
                                     color = colorScheme.tertiary
                                 )
@@ -141,19 +140,16 @@ fun ChildScreen(
         )
     }
 
-    if (deleteNodeDialogState.value != null) {
-        AnimatedVisibility(
-            visible = nodeCreatingDialogVisible.value,
-            enter = slideInVertically { it }) {
-            DeleteNodeDialog(
-                onConfirm = {
-                    onDeleteChild(deleteNodeDialogState.value!!)
-                    nodeCreatingDialogVisible.value = false
-                },
-                onDismiss = { deleteNodeDialogState.value = null }
-            )
-        }
+    AnimatedVisibility(
+        visible = (deleteNodeDialogState.value is Node),
+        enter = slideInVertically { it }) {
+        DeleteNodeDialog(
+            onConfirm = {
+                onDeleteChild(deleteNodeDialogState.value!!)
+                deleteNodeDialogState.value = null
+            },
+            onDismiss = { deleteNodeDialogState.value = null }
+        )
     }
-
 
 }

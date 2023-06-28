@@ -7,12 +7,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.tanexc.tree.core.utils.HashTool.getHashPart
 import ru.tanexc.tree.core.utils.Screen
 import ru.tanexc.tree.core.utils.State
 import ru.tanexc.tree.domain.model.Node
+import ru.tanexc.tree.domain.use_case.node_use_cases.DeleteNodeListUseCase
+import ru.tanexc.tree.domain.use_case.node_use_cases.DeleteNodeUseCase
 import ru.tanexc.tree.domain.use_case.node_use_cases.GetAllNodesUseCase
 import ru.tanexc.tree.domain.use_case.node_use_cases.GetNodeByIdUseCase
 import ru.tanexc.tree.domain.use_case.node_use_cases.SetNodeUseCase
@@ -24,7 +29,9 @@ class MainViewModel @Inject constructor(
     private val getNodeByIdUseCase: GetNodeByIdUseCase,
     private val getAllNodesUseCase: GetAllNodesUseCase,
     private val setNodeUseCase: SetNodeUseCase,
-    private val setNodesListUseCase: SetNodesListUseCase
+    private val setNodesListUseCase: SetNodesListUseCase,
+    private val deleteNodeListUseCase: DeleteNodeListUseCase,
+    private val deleteNodeUseCase: DeleteNodeUseCase
 ) : ViewModel() {
 
     private val _shownNode: MutableState<Node?> = mutableStateOf(null)
@@ -43,11 +50,11 @@ class MainViewModel @Inject constructor(
     val currentScreen by _currentScreen
 
     init {
-        updateShownNode(1)
+        initializeRootNode()
     }
 
-    private fun updateShownNode(id: Long) {
-        getNodeByIdUseCase(id).onEach {
+    private fun initializeRootNode() {
+        getNodeByIdUseCase(1).onEach {
             when (it) {
                 is State.Success -> {
                     _shownNode.value = it.data!!
@@ -149,5 +156,38 @@ class MainViewModel @Inject constructor(
         _shownNode.value = node
         updateChild(node.child)
         updateParent(node.parent)
+    }
+
+
+    fun deleteChildNodeBranch(node: Node) {
+
+        deleteNodeUseCase(node.id).launchIn(viewModelScope)
+        if (node.parent == shownNode!!.id) {
+            editShownNode()
+        }
+
+        val child: List<Long> = node.child
+        viewModelScope.launch(Dispatchers.IO) {
+            for (childId in node.child) {
+                getNodeByIdUseCase(childId).onEach { state ->
+                    when (state) {
+                        is State.Success -> {
+                            Log.i("cum", "state data ${state.data}")
+                            deleteChildNodeBranch(state.data!!)
+                        }
+                        else -> {
+                            _toastMessage.value = state.message
+                            Log.i("cum", "erorr ${state.message}")
+                        }
+                    }
+                }.launchIn(viewModelScope)
+            }
+        }.invokeOnCompletion {
+            deleteNodeListUseCase(child).launchIn(viewModelScope)
+        }
+    }
+
+    fun removeChild(childId: Long) {
+        _shownNodeChild.value = _shownNodeChild.value.filter { it.id != childId }
     }
 }
