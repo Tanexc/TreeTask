@@ -8,8 +8,8 @@ import ru.tanexc.tree.presentation.theme.getTheme
 
 data class Settings(
     val themeId: Long = 0,
-    val useDarkTheme: Boolean = true,
-    val lastNodeId: Long = 0
+    val lastNodeId: Long = 0,
+    val useDarkTheme: Boolean = true
 ): Model {
     override fun asDatabaseEntity(): SettingsEntity = SettingsEntity(
         themeId = themeId,

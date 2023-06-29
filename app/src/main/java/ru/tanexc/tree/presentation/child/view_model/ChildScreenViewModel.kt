@@ -33,9 +33,6 @@ class ChildScreenViewModel @Inject constructor(
     private val _child: MutableState<List<Node>?> = mutableStateOf(null)
     val child by _child
 
-    private val _toastMessage: MutableState<String?> = mutableStateOf(null)
-    val toastMessage by _toastMessage
-
 
     fun updateParent(parent: Node) {
         _parentNode.value = parent
@@ -77,9 +74,7 @@ class ChildScreenViewModel @Inject constructor(
                         setParentNode(parent.copy(child=child!!.map { it.id }))
                     }
 
-                    else -> {
-                        _toastMessage.value = state.message
-                    }
+                    else -> {}
                 }
             }.launchIn(viewModelScope)
         }
@@ -93,9 +88,7 @@ class ChildScreenViewModel @Inject constructor(
                     _parentNode.value = state.data!!
                 }
 
-                else -> {
-                    _toastMessage.value = state.message
-                }
+                else -> {}
             }
         }.launchIn(viewModelScope)
     }
@@ -118,9 +111,7 @@ class ChildScreenViewModel @Inject constructor(
                             deleteChildNodeBranch(state.data!!)
                         }
 
-                        else -> {
-                            _toastMessage.value = state.message
-                        }
+                        else -> {}
                     }
                 }.launchIn(viewModelScope)
             }
@@ -128,5 +119,4 @@ class ChildScreenViewModel @Inject constructor(
             deleteNodeListUseCase(child).launchIn(viewModelScope)
         }
     }
-
 }

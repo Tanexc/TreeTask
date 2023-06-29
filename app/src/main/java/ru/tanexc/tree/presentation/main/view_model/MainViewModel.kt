@@ -33,9 +33,6 @@ class MainViewModel @Inject constructor(
     private val _currentNodeParent: MutableState<Node?> = mutableStateOf(null)
     val currentNodeParent by _currentNodeParent
 
-    private val _toastMessage: MutableState<String?> = mutableStateOf(null)
-    val toastMessage by _toastMessage
-
     private val _currentScreen: MutableState<Screen> = mutableStateOf(Screen.Node)
     val currentScreen by _currentScreen
 
@@ -51,31 +48,27 @@ class MainViewModel @Inject constructor(
     }
 
     fun initializeNode(id: Long) {
-        getNodeByIdUseCase(id).onEach {
-            when (it) {
+        getNodeByIdUseCase(id).onEach { state ->
+            when (state) {
                 is State.Success -> {
-                    _currentNode.value = it.data!!
-                    updateParent(it.data.parent)
-                    updateChildId(it.data.child)
+                    _currentNode.value = state.data!!
+                    updateParent(state.data.parent)
+                    updateChildId(state.data.child)
                 }
 
-                else -> {
-                    _toastMessage.value = it.message
-                }
+                else -> {}
             }
         }.launchIn(viewModelScope)
     }
 
     private fun updateParent(id: Long) {
-        getNodeByIdUseCase(id).onEach {
-            when (it) {
+        getNodeByIdUseCase(id).onEach { state ->
+            when (state) {
                 is State.Success -> {
-                    _currentNodeParent.value = it.data
+                    _currentNodeParent.value = state.data
                 }
 
-                else -> {
-                    _toastMessage.value = it.message
-                }
+                else -> {}
             }
         }.launchIn(viewModelScope)
     }
@@ -100,9 +93,7 @@ class MainViewModel @Inject constructor(
                         }
                     }
 
-                    else -> {
-                        _toastMessage.value = state.message
-                    }
+                    else -> {}
                 }
             }.launchIn(viewModelScope)
         }
@@ -131,16 +122,12 @@ class MainViewModel @Inject constructor(
                                 _currentNode.value = it.data!!
                             }
 
-                            else -> {
-                                _toastMessage.value = state.message
-                            }
+                            else -> {}
                         }
                     }.launchIn(viewModelScope)
                 }
 
-                else -> {
-                    _toastMessage.value = state.message
-                }
+                else -> {}
             }
         }.launchIn(viewModelScope)
     }
@@ -153,4 +140,5 @@ class MainViewModel @Inject constructor(
         _settings.value = settings
         setSettingsUseCase(settings).launchIn(viewModelScope)
     }
+
 }

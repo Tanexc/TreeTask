@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -23,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,7 +38,6 @@ import ru.tanexc.tree.presentation.settings.view_model.SettingsViewModel
 fun SettingsScreen(
     modifier: Modifier = Modifier,
     onSettingsChange: (Settings) -> Unit,
-    colorScheme: ColorScheme,
     settings: Settings
 ) {
 
@@ -60,6 +57,70 @@ fun SettingsScreen(
                 )
         ) {
 
+
+            item {
+                val items = listOf(
+                    SelectButtonItem(
+                        title = stringResource(R.string.app_default),
+                        onSelected = {
+                            viewModel.changeTheme(Theme.Default())
+                            onSettingsChange(viewModel.settings)
+                        }
+                    ),
+                    SelectButtonItem(
+                        title = stringResource(R.string.blue),
+                        onSelected = {
+                            viewModel.changeTheme(Theme.Blue())
+                            onSettingsChange(viewModel.settings)
+                        }
+                    ),
+                    SelectButtonItem(
+                        title = stringResource(R.string.purple),
+                        onSelected = {
+                            viewModel.changeTheme(Theme.Purple())
+                            onSettingsChange(viewModel.settings)
+                        }
+                    )
+                )
+                InfoCard(
+                    modifier = Modifier
+                        .height(108.dp)
+                        .padding(
+                            horizontal = 0.dp,
+                            vertical = 4.dp
+                        ),
+                    borderColor = (viewModel.colorScheme ?: settings.getColorScheme()).outline,
+                    borderRadius = 16.dp,
+                    borderWidth = 1.dp,
+                    backgroundColor = (viewModel.colorScheme
+                        ?: settings.getColorScheme()).secondaryContainer.copy(
+                        0.3f
+                    )
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Text(
+                            stringResource(R.string.style),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                            fontSize = 16.sp,
+                            fontFamily = FontFamily(Font(R.font.montserrat))
+                        )
+
+                        SelectButtonGroup(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            selectedItemIndex = (viewModel.themeId ?: settings.themeId).toInt(),
+                            borderColor = (viewModel.colorScheme
+                                ?: settings.getColorScheme()).outline,
+                            selectedColor = (viewModel.colorScheme
+                                ?: settings.getColorScheme()).secondaryContainer,
+                            items = items,
+                            fontSize = 16.dp
+                        )
+                    }
+                }
+            }
             item {
                 InfoCard(
                     modifier = Modifier
@@ -125,70 +186,6 @@ fun SettingsScreen(
                     }
                 }
             }
-            item {
-                val items = listOf(
-                    SelectButtonItem(
-                        title = stringResource(R.string.app_default),
-                        onSelected = {
-                            viewModel.changeTheme(Theme.Default())
-                            onSettingsChange(viewModel.settings)
-                        }
-                    ),
-                    SelectButtonItem(
-                        title = stringResource(R.string.blue),
-                        onSelected = {
-                            viewModel.changeTheme(Theme.Blue())
-                            onSettingsChange(viewModel.settings)
-                        }
-                    ),
-                    SelectButtonItem(
-                        title = stringResource(R.string.purple),
-                        onSelected = {
-                            viewModel.changeTheme(Theme.Purple())
-                            onSettingsChange(viewModel.settings)
-                        }
-                    )
-                )
-                InfoCard(
-                    modifier = Modifier
-                        .height(108.dp)
-                        .padding(
-                            horizontal = 0.dp,
-                            vertical = 4.dp
-                        ),
-                    borderColor = (viewModel.colorScheme ?: settings.getColorScheme()).outline,
-                    borderRadius = 16.dp,
-                    borderWidth = 1.dp,
-                    backgroundColor = (viewModel.colorScheme
-                        ?: settings.getColorScheme()).secondaryContainer.copy(
-                        0.3f
-                    )
-                ) {
-                    Column(modifier = Modifier.padding(12.dp)) {
-                        Text(
-                            stringResource(R.string.style),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth(),
-                            fontSize = 16.sp,
-                            fontFamily = FontFamily(Font(R.font.montserrat))
-                        )
-
-                        SelectButtonGroup(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            selectedItemIndex = (viewModel.themeId ?: settings.themeId).toInt(),
-                            borderColor = (viewModel.colorScheme
-                                ?: settings.getColorScheme()).outline,
-                            selectedColor = (viewModel.colorScheme
-                                ?: settings.getColorScheme()).secondaryContainer,
-                            items = items,
-                            fontSize = 16.dp
-                        )
-                    }
-                }
-            }
-
         }
     }
 

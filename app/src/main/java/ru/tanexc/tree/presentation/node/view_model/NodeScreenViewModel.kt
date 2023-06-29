@@ -1,5 +1,6 @@
 package ru.tanexc.tree.presentation.node.view_model
 
+
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,13 +33,10 @@ class NodeScreenViewModel @Inject constructor(
     private val _parentNode: MutableState<Node?> = mutableStateOf(null)
     val parentNode by _parentNode
 
-    private val _toastMessage: MutableState<String?> = mutableStateOf(null)
-    val toastMessage by _toastMessage
-
 
     fun deleteChildNodeBranch(node: Node) {
         val child: List<Long> = node.child
-        val job = deleteNodeUseCase(node.id)
+        deleteNodeUseCase(node.id)
             .launchIn(viewModelScope)
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -49,9 +47,7 @@ class NodeScreenViewModel @Inject constructor(
                             deleteChildNodeBranch(state.data!!)
                         }
 
-                        else -> {
-                            _toastMessage.value = state.message
-                        }
+                        else -> {}
                     }
                 }.launchIn(viewModelScope)
             }
@@ -69,9 +65,7 @@ class NodeScreenViewModel @Inject constructor(
                     updateParent()
                 }
 
-                else -> {
-                    _toastMessage.value = state.message
-                }
+                else -> {}
             }
         }.launchIn(viewModelScope)
     }
@@ -83,9 +77,7 @@ class NodeScreenViewModel @Inject constructor(
                     _parentNode.value = state.data!!
                 }
 
-                else -> {
-                    _toastMessage.value = state.message
-                }
+                else -> {}
             }
         }.launchIn(viewModelScope)
     }
@@ -93,5 +85,4 @@ class NodeScreenViewModel @Inject constructor(
     fun changeNode(node: Node) {
         setNodeUseCase(node).launchIn(viewModelScope)
     }
-
 }

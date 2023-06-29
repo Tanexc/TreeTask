@@ -10,12 +10,12 @@ data class SettingsEntity(
     @PrimaryKey
     val id: Long = 0,
     val themeId: Long,
-    val useDarkTheme: Boolean,
-    val lastNodeId: Long
+    val lastNodeId: Long,
+    val useDarkTheme: Boolean
 ) : DatabaseEntity {
     override fun asDomain(): Settings = Settings(
         themeId = themeId,
-        useDarkTheme = useDarkTheme,
-        lastNodeId = lastNodeId
+        lastNodeId = lastNodeId,
+        useDarkTheme = useDarkTheme
     )
 }

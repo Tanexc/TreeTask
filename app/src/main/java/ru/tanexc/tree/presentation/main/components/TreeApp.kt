@@ -158,8 +158,6 @@ fun TreeApp() {
                                 viewModel.setColorScheme(it.getColorScheme())
                                 viewModel.changeSettings(it)
                             },
-                            colorScheme = viewModel.colorScheme ?: (viewModel.settings
-                                ?: Settings()).getColorScheme(),
                             settings = viewModel.settings ?: Settings()
                         )
                     }
@@ -224,6 +222,5 @@ fun TreeApp() {
                 activity.finish()
             }
         }
-
     }
 }
