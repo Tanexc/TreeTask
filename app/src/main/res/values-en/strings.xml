@@ -21,7 +21,6 @@
     <string name="yes">Yes</string>
     <string name="delete_question">Do you want to delete a node?</string>
     <string name="app_default">Default</string>
-    <string name="blue">Blue</string>
     <string name="purple">Purple</string>
     <string name="style">Style</string>
     <string name="dark_theme">Dark theme</string>
@@ -30,4 +29,5 @@
     <string name="node_tips">~ To delete a node, swipe the card with its name to the right.\n ~ To go to the parent node, click on the card with the name of the parent.</string>
     <string name="settings_tips">Customize the theme to your taste.</string>
     <string name="tips">Tips</string>
+    <string name="orange">Orange</string>
 </resources>

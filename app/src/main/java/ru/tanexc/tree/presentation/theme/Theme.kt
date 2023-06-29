@@ -9,9 +9,9 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ru.tanexc.tree.core.utils.Theme
 import ru.tanexc.tree.core.utils.Theme.*
 import ru.tanexc.tree.presentation.theme.Colors.AppColorScheme
-import ru.tanexc.tree.presentation.theme.Colors.BlueColorScheme
 import ru.tanexc.tree.presentation.theme.Colors.DefaultColorScheme
 import ru.tanexc.tree.presentation.theme.Colors.GreenColorScheme
+import ru.tanexc.tree.presentation.theme.Colors.OrangeColorScheme
 
 
 @Composable
@@ -30,9 +30,8 @@ fun TreeTheme(
 fun getTheme(colorTheme: Theme, useDarkTheme: Boolean): ColorScheme {
     val scheme: AppColorScheme = when (colorTheme) {
         is Default -> DefaultColorScheme()
-        is Blue -> BlueColorScheme()
+        is Orange -> OrangeColorScheme()
         is Purple -> GreenColorScheme()
-        else -> DefaultColorScheme()
     }
 
     return when (useDarkTheme) {

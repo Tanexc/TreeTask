@@ -21,7 +21,6 @@
     <string name="yes">Да</string>
     <string name="delete_question">Вы действительно хотите удалить узел?</string>
     <string name="app_default">Основной</string>
-    <string name="blue">Синий</string>
     <string name="purple">Сиреневый</string>
     <string name="style">Стиль</string>
     <string name="dark_theme">Тёмная тема</string>
@@ -30,4 +29,5 @@
     <string name="node_tips">~ Для удаления узла смахните вправо карточку с его названием.\n ~ Для перехода к родительскому узлу нажмите на карточку с названием родителя.</string>
     <string name="settings_tips">Настройте тему на ваш вкус.</string>
     <string name="tips">Советы</string>
+    <string name="orange">Персиковый</string>
 </resources>
