@@ -22,6 +22,10 @@ Tree is an application that allows you to create and delete nodes, navigate to d
   <img src="https://github.com/Tanexc/TreeTask/assets/74925839/82c5298c-a519-472b-8904-06564d07e066"/>
 </p>
 
+# Download
+
+You can download latest release <a href="https://github.com/Tanexc/TreeTask/releases/tag/1.0.0" target="_blank">here</a>
+
 # Tech stack
 
 - [Kotlin](https://kotlinlang.org/) based 
