@@ -1,8 +1,11 @@
-<h1 align="center">Tree</h1>
-
-<p align="center">
+<h1 align="center">
+  <p align="center">
   <img src="https://github.com/Tanexc/TreeTask/assets/74925839/a119ea41-6c46-4424-8436-bf73cd2c8261"/>
 </p>
+Tree
+</h1>
+
+
 
 <p align="center">
  <img alt="material" src="https://custom-icon-badges.demolab.com/badge/material%20you-palegreen?style=for-the-badge&logoColor=black&logo=material-you"/></a>
@@ -12,11 +15,15 @@
   <a href="https://github.com/tannec"><img alt="Profile" src="https://img.shields.io/badge/Github-Tannec-6495ed?logo=github&logoColor=white&style=for-the-badge"/></a> 
 </p>
 
-<p align="">  
-Tree is an application that allows you to create, delete nodes, whitch depends on other nodes in tree
+<p align="center">  
+Tree is an application that allows you to create and delete nodes, navigate to dependent nodes throughout the tree.
 </p>
 
-## Tech stack
+<p align="center">  
+  <img src="https://github.com/Tanexc/TreeTask/assets/74925839/302badc0-8631-4f48-9ed7-7b7719eb7b7b"/>
+</p>
+
+# Tech stack
 
 - [Kotlin](https://kotlinlang.org/) based 
 
