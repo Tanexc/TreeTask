@@ -9,7 +9,6 @@ Tree
 
 <p align="center">
  <img alt="material" src="https://custom-icon-badges.demolab.com/badge/material%20you-palegreen?style=for-the-badge&logoColor=black&logo=material-you"/></a>
-  <img alt="Room" src="https://img.shields.io/static/v1?style=for-the-badge&message=Room&color=E97450&logo=Ktor&logoColor=E97450&label="/></a> 
   <img alt="Kotlin" src="https://img.shields.io/badge/Kotlin-a503fc?logo=kotlin&logoColor=white&style=for-the-badge"/></a>
   <img alt="Jetpack Compose" src="https://img.shields.io/static/v1?style=for-the-badge&message=Jetpack+Compose&color=4285F4&logo=Jetpack+Compose&logoColor=FFFFFF&label="/></a> 
   <a href="https://github.com/tannec"><img alt="Profile" src="https://img.shields.io/badge/Github-Tannec-6495ed?logo=github&logoColor=white&style=for-the-badge"/></a> 
